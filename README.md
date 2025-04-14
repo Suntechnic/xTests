@@ -8,7 +8,7 @@
 
 Тесты запускаются в директории local/php_interface.  
 ```sh
-vendor/bin/phpunit tests --bootstrap tests/bitrix.php
+vendor/bin/phpunit tests --bootstrap tests/Bxx/bitrix.php
 ```
 
 Проектные тесты разместите в директории local/php_interface/tests/App. Смотрите пример в https://github.com/Suntechnic/x
