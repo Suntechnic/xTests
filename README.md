@@ -11,4 +11,4 @@
 vendor/bin/phpunit tests --bootstrap tests/Bxx/bitrix.php
 ```
 
-Проектные тесты разместите в директории local/php_interface/tests/App. Смотрите пример в https://github.com/Suntechnic/x
+Проектные тесты разместите в директории local/php_interface/tests/App. Смотрите пример в local/php_interface/tests/Bxx/BxxSettingsTest.php
