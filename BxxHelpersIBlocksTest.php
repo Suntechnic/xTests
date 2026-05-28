@@ -1,42 +1,34 @@
 <?php
-use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class BxxHelpersIBlocksTest
  */
 class BxxHelpersIBlocksTest extends \PHPUnit\Framework\TestCase
 {
-    
-
-
-    public static function lstIBlocksProvider(): array
+    // тестирование получения id инфоблоков по коду ИБ
+    public function testGetIdByCode(): void
     {
-        \Bxx\Core::init(['iblock']);
+        if (!\Bitrix\Main\Loader::includeModule('iblock')) {
+            self::markTestSkipped('Модуль iblock не установлен в этом проекте');
+        }
 
         $rdb = \CIBlock::GetList(
                 [],
-                ['!CODE' => [false,'']]
+                ['!CODE' => [false, '']]
             );
 
         $lstIBlocks = [];
         while ($dctIBlock = $rdb->fetch()) {
-            $lstIBlocks[] = 
-                [intval($dctIBlock['ID']),$dctIBlock['CODE']];
-            if (count($lstIBlocks)>20) break;
+            $lstIBlocks[] = [intval($dctIBlock['ID']), $dctIBlock['CODE']];
+            if (count($lstIBlocks) > 20) break;
         }
 
-        return $lstIBlocks;
+        foreach ($lstIBlocks as $dctIBlock) {
+            [$Id, $Code] = $dctIBlock;
+            $this->assertSame(
+                    $Id,
+                    \Bxx\Helpers\IBlocks::getIdByCode($Code)
+                );
+        }
     }
-    
-    // тестирование получения id инфоблоков по коду ИБ
-    #[DataProvider('lstIBlocksProvider')]
-    public function testGetIdByCode(int $Id, string $Code): void
-    {
-        $this->assertSame(
-                $Id,
-                \Bxx\Helpers\IBlocks::getIdByCode($Code)
-            );
-    }
-
-
 }
