@@ -56,6 +56,10 @@ class BxxSettingsTest extends \PHPUnit\Framework\TestCase
 
     public function testIO (): void
     {
+        if (defined('APPLICATION_ENV') && APPLICATION_ENV === 'production') {
+            $this->markTestSkipped('IO-тест отключен в production');
+        }
+
         $refOptionsInfo = \Bxx\Settings::getOptionsInfo();
         // Текущие значения
         $refOptions = \Bxx\Settings::getOptions();
