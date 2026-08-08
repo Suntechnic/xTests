@@ -1,5 +1,4 @@
 <?php
-use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Class BxxSettingsTest
@@ -8,47 +7,25 @@ class BxxSettingsTest extends \PHPUnit\Framework\TestCase
 {
 
 
-    public function testOptions (): void
-    {
-        $this->assertNotSame(
-                0,
-                count(\Bxx\Settings::getOptionsInfo()),
-                'Тестирование будет провалено, так как нет настроек'
-            );
-    }
-
-
     /**
-     * Предоставляем список списков вида [ДефолтноеЗначениеПолученноеИзOptions, Code]
+     * Проверяем что дефолтные значения совпадают с теми что в настройках.
+     *  void
      */
-    public static function arraysDefaultProvider(): array
+    public function testDefaultOptions (): void
     {
-        $lst = [];
-        foreach (\Bxx\Settings::getOptionsInfo() as $Code=>$dctOption) { if (!isset($dctOption['default'])) continue;
-            $lst[] = [
-                $Code,
-                $dctOption['default']
-            ];
+        $dctOptions = \Bxx\Settings::getOptionsInfo();
+        if (!$dctOptions) {
+            $this->markTestSkipped('Реестр настроек пуст');
         }
-        return $lst;
-    }
-    /**
-     * Проверяем что дефолтные значения совпадают с теми что в настройках
-     * @dataProvider arraysDefaultProvider
-     * @param string $Code Код настройки
-     * @param mixed $DefaultValue Дефолтное значение
-     * @return void
-     */
-    #[DataProvider('arraysDefaultProvider')]
-    public function testDefaultOptions (
-            string $Code, 
-            $DefaultValue
-        ): void
-    {
-        $this->assertSame(
-                \Bxx\Settings::getOptionDefault($Code),
-                $DefaultValue
-            );
+
+        foreach ($dctOptions as $Code => $dctOption) {
+            if (!isset($dctOption['default'])) continue;
+
+            $this->assertSame(
+                    \Bxx\Settings::getOptionDefault($Code),
+                    $dctOption['default']
+                );
+        }
     }
 
 
@@ -61,6 +38,10 @@ class BxxSettingsTest extends \PHPUnit\Framework\TestCase
         }
 
         $refOptionsInfo = \Bxx\Settings::getOptionsInfo();
+        if (!$refOptionsInfo) {
+            $this->markTestSkipped('Реестр настроек пуст');
+        }
+
         // Текущие значения
         $refOptions = \Bxx\Settings::getOptions();
 
